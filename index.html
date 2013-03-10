@@ -40,6 +40,8 @@
 
                  var wID = navigator.accelerometer.watchAcceleration(onAccSuccess, onAccError, { frequency: 1000 });
 
+                 navigator.splashscreen.show();
+
                  navigator.camera.getPicture(onSuccess, onError, { quality: 50, destinationType: Camera.DestinationType.FILE_URI }); 
 
                  $('#button').click(function() {
