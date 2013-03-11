@@ -28,6 +28,10 @@
          <script type="text/javascript" src="cordova-2.5.0.js"></script> 
         <script src="jquery-1.9.1.js"></script>
         <script src="jquery.mobile-1.3.0.js"></script>
+        <script src="js/jquery.ui.map.js"></script>
+        <script src="js/jquery.ui.map.services.js"></script>
+        <script src="js/jquery.ui.map.extensions.js"></script>
+
          <script type="text/javascript" charset="utf-8">
 
              // Wait for Cordova to load
@@ -49,6 +53,44 @@
                      navigator.notification.alert("You clicked me!", onButtonSuccess, "Click", "OK");
                    });
 
+                 ////////////////////////////////////////////////////////////
+
+                 var mobileDemo = { 'center': '57.7973333,12.0502107', 'zoom': 10 };
+                 $('#directions_map').live('pageinit', function () {
+                     demo.add('directions_map', function () {
+                         $('#map_canvas_1').gmap({ 'center': mobileDemo.center, 'zoom': mobileDemo.zoom, 'disableDefaultUI': true, 'callback': function () {
+                             var self = this;
+                             self.set('getCurrentPosition', function () {
+                                 self.refresh();
+                                 self.getCurrentPosition(function (position, status) {
+                                     if (status === 'OK') {
+                                         var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+                                         self.get('map').panTo(latlng);
+                                         self.search({ 'location': latlng }, function (results, status) {
+                                             if (status === 'OK') {
+                                                 $('#from').val(results[0].formatted_address);
+                                             }
+                                         });
+                                     } else {
+                                         alert('Unable to get current position');
+                                     }
+                                 });
+                             });
+                             $('#submit').click(function () {
+                                 self.displayDirections({ 'origin': $('#from').val(), 'destination': $('#to').val(), 'travelMode': google.maps.DirectionsTravelMode.DRIVING }, { 'panel': document.getElementById('directions') }, function (response, status) {
+                                     (status === 'OK') ? $('#results').show() : $('#results').hide();
+                                 });
+                                 return false;
+                             });
+                         } 
+                         });
+                     }).load('directions_map');
+                 });
+
+                 $('#directions_map').live('pageshow', function () {
+                     demo.add('directions_map', $('#map_canvas_1').gmap('get', 'getCurrentPosition')).load('directions_map');
+                 });
+                 //////////////////////////////////////////////////
                  
                  var element = document.getElementById('deviceProperties');
 
@@ -116,7 +158,7 @@
         <div data-role="header">
             <h1>Home Page</h1>
         </div>
-        <div data-role="navbar" data-iconpos="right">
+      <!--  <div data-role="navbar" data-iconpos="right">
             <ul>
                 <li>
                     <a href="#home" data-transition="fade" data-theme="g" data-icon="home"
@@ -130,19 +172,20 @@
                     </a>
                 </li>
             </ul>
-        </div>
+        </div> -->
         <div data-role="content">
         
-            Hello Phone Gap and jQuery Mobile!
-            <a href="#new-page" data-role="button">New Page</a>
-            <br />
+            <center><img src="img/mainlogo.png" /></center>
+        <!--    <a href="#new-page" data-role="button">New Page</a> -->
             <!--    <p id="deviceProperties">Loading device properties...</p>
                 <p id="aX"></p>
                 <p id="aY"></p>
                 <p id="aZ"></p>
                 <p id="aTime"></p>
                 <p id="imageuri"></p>  -->
-                <a id="button" href="#" data-role="button">Click Me</a>
+              <!--  <a id="button" href="#" data-role="button">Click Me</a> -->
+              <p>Envisage Web Services is a full service agency providing affordable web design, e-commerce website design, and other online and print services in Newark, Delaware. </p>
+              <p>We also serve other regional and national clients. We strive to provide excellent customer service, quality and professional work while maintaining affordable costs. We offer a comprehensive approach to taking your business online in an attempt to target more prospective customers.</p>
 
 
           
@@ -156,14 +199,14 @@
         <div data-role="footer" data-position="fixed">
         <div class="ui-navbar comboSprite">
 					<ul class="apple-navbar-ui ui-grid-d">
-						<li class="ui-block-a"><a href="#" data-icon="features" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Features</span><span class="ui-icon"></span></span></a></li>
+						<li class="ui-block-a"><a href="#directions_map" data-icon="features" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Features</span><span class="ui-icon"></span></span></a></li>
 						<li class="ui-block-b"><a href="#" data-icon="brands" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Brands</span><span class="ui-icon"></span></span></a></li>
 						<li class="ui-block-c"><a href="#" data-icon="fees" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Fees</span><span class="ui-icon"></span></span></a></li>
 						<li class="ui-block-d"><a href="#" data-icon="contact" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Contact</span><span class="ui-icon"></span></span></a></li>
 						<li class="ui-block-e"><a href="#" data-icon="about" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">About</span><span class="ui-icon"></span></span></a></li>
 					</ul>
 					</div>
-             <a href="#dialogpage" data-rel="dialog" data-icon="plus">Add Something</a>
+     <!--        <a href="#dialogpage" data-rel="dialog" data-icon="plus">Add Something</a> -->
         </div>
     </div>
 
@@ -192,7 +235,33 @@
             This is a dialog
             </div>
     </div>
+    <!------------------------------------>
 
+    <div id="directions_map" data-role="page">
+			<div data-role="header">
+				<h1><a data-ajax="false" href="/">Directions</h1>
+				<a data-rel="back">Back</a>
+			</div>
+			<div data-role="content">	
+				<div class="ui-bar-c ui-corner-all ui-shadow" style="padding:1em;">
+					<div id="map_canvas_1" style="height:300px;"></div>
+					<p>
+						<label for="from">From</label>
+						<input id="from" class="ui-bar-c" type="text" value="G&ouml;teborg, Sweden" />
+					</p>
+					<p>
+						<label for="to">To</label>
+						<input id="to" class="ui-bar-c" type="text" value="Stockholm, Sweden" />
+					</p>
+					<a id="submit" href="#" data-role="button" data-icon="search">Get directions</a>
+				</div>
+				<div id="results" class="ui-listview ui-listview-inset ui-corner-all ui-shadow" style="display:none;">
+					<div class="ui-li ui-li-divider ui-btn ui-bar-b ui-corner-top ui-btn-up-undefined">Results</div>
+					<div id="directions"></div>
+					<div class="ui-li ui-li-divider ui-btn ui-bar-b ui-corner-bottom ui-btn-up-undefined"></div>
+				</div>
+			</div>
+		</div>
        <!-- <div class="app">
             <h1>Apache Cordova</h1>
             <div id="deviceready" class="blink">
