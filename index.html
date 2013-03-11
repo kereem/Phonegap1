@@ -42,7 +42,7 @@
 
                  navigator.splashscreen.show();
 
-                 navigator.camera.getPicture(onSuccess, onError, { quality: 50, destinationType: Camera.DestinationType.FILE_URI }); 
+                 // navigator.camera.getPicture(onSuccess, onError, { quality: 50, destinationType: Camera.DestinationType.FILE_URI }); 
 
                  $('#button').click(function() {
                      navigator.notification.alert("You clicked me!", onButtonSuccess, "Click", "OK");
@@ -115,22 +115,23 @@
         <div data-role="header">
             <h1>Home Page</h1>
         </div>
-        <div data-role="content">
         <div data-role="navbar" data-iconpos="right">
             <ul>
                 <li>
-                    <a href="#home" data-transition="fade" data-theme="b" data-icon="home"
+                    <a href="#home" data-transition="fade" data-theme="g" data-icon="home"
                     class="ui-btn-active ui-state-persist">
                         Home
                     </a>
                 </li>
                 <li>
-                    <a href="#new-page" data-transition="fade" data-theme="b" data-icon="forward">
+                    <a href="#new-page" data-transition="fade" data-theme="g" data-icon="forward">
                         New Page
                     </a>
                 </li>
             </ul>
         </div>
+        <div data-role="content">
+        
             Hello Phone Gap and jQuery Mobile!
             <a href="#new-page" data-role="button">New Page</a>
             <br />
@@ -152,6 +153,15 @@
             </ul> -->
         </div>
         <div data-role="footer" data-position="fixed">
+        <div class="ui-navbar comboSprite">
+					<ul class="apple-navbar-ui ui-grid-d">
+						<li class="ui-block-a"><a href="#" data-icon="features" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Features</span><span class="ui-icon"></span></span></a></li>
+						<li class="ui-block-b"><a href="#" data-icon="brands" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Brands</span><span class="ui-icon"></span></span></a></li>
+						<li class="ui-block-c"><a href="#" data-icon="fees" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Fees</span><span class="ui-icon"></span></span></a></li>
+						<li class="ui-block-d"><a href="#" data-icon="contact" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">Contact</span><span class="ui-icon"></span></span></a></li>
+						<li class="ui-block-e"><a href="#" data-icon="about" class="ui-btn"><span class="ui-btn-inner"><span class="ui-btn-text">About</span><span class="ui-icon"></span></span></a></li>
+					</ul>
+					</div>
              <a href="#dialogpage" data-rel="dialog" data-icon="plus">Add Something</a>
         </div>
     </div>
